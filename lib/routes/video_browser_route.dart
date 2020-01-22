@@ -1,5 +1,6 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/services/connection_handler.dart';
+import 'package:cast_videos_flutter/widgets/video_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -40,23 +41,8 @@ class VideoBrowserRoute extends StatelessWidget {
             );
           }
 
-          debugPrint('Categories: ${snapshot.data.categories.length}');
-
-          return ListView(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.cast),
-                title: Text('Video 1'),
-              ),
-              ListTile(
-                leading: Icon(Icons.cast),
-                title: Text('Video 2'),
-              ),
-              ListTile(
-                leading: Icon(Icons.cast),
-                title: Text('Video 3'),
-              ),
-            ],
+          return VideoList(
+            videoCatalog: snapshot.data,
           );
         },
       ),
