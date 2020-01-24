@@ -4,10 +4,16 @@ import 'package:cast_videos_flutter/widgets/video_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+typedef VideoSelectedCallback = void Function(VideoDescriptor video);
+
 class VideoList extends StatelessWidget {
-  VideoList({this.videoCatalog});
+  VideoList({
+    @required this.videoCatalog,
+    this.onVideoSelected,
+  });
 
   final VideoCatalog videoCatalog;
+  final VideoSelectedCallback onVideoSelected;
 
   String get imagePrefix => this.videoCatalog?.categories?.first?.images;
 
@@ -19,14 +25,18 @@ class VideoList extends StatelessWidget {
     if (video == null) {
       return ListTile(
         title: Text('---'),
+        onTap: () => this.onVideoSelected?.call(video),
       );
     }
 
     return Padding(
       padding: EdgeInsets.all(10),
-      child: VideoListItem(
-        video: video,
-        imagePrefix: imagePrefix,
+      child: GestureDetector(
+        onTap: () => this.onVideoSelected?.call(video),
+        child: VideoListItem(
+          video: video,
+          imagePrefix: imagePrefix,
+        ),
       ),
     );
   }

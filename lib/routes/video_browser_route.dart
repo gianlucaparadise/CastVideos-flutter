@@ -43,6 +43,7 @@ class VideoBrowserRoute extends StatelessWidget {
 
           return VideoList(
             videoCatalog: snapshot.data,
+            onVideoSelected: (video) => debugPrint('clicked ${video.title}'),
           );
         },
       ),
