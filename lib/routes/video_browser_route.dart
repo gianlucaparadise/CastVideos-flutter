@@ -1,4 +1,6 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
+import 'package:cast_videos_flutter/models/video_descriptor.dart';
+import 'package:cast_videos_flutter/routes/%20video_detail_route.dart';
 import 'package:cast_videos_flutter/services/connection_handler.dart';
 import 'package:cast_videos_flutter/widgets/video_list.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,17 @@ class VideoBrowserRoute extends StatelessWidget {
   VideoBrowserRoute({Key key, this.title}) : super(key: key);
 
   final String title;
+
+  _onVideoSelected(BuildContext context, VideoDescriptor video) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoDetailRoute(
+          video: video,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,7 @@ class VideoBrowserRoute extends StatelessWidget {
 
           return VideoList(
             videoCatalog: snapshot.data,
-            onVideoSelected: (video) => debugPrint('clicked ${video.title}'),
+            onVideoSelected: (video) => _onVideoSelected(context, video),
           );
         },
       ),
