@@ -11,11 +11,13 @@ class VideoBrowserRoute extends StatelessWidget {
 
   final String title;
 
-  _onVideoSelected(BuildContext context, VideoDescriptor video) {
+  _onVideoSelected(
+      BuildContext context, VideoCatalog catalog, VideoDescriptor video) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => VideoDetailRoute(
+          videoCatalog: catalog,
           video: video,
         ),
       ),
@@ -54,9 +56,15 @@ class VideoBrowserRoute extends StatelessWidget {
             );
           }
 
+          final catalog = snapshot.data;
+
           return VideoList(
-            videoCatalog: snapshot.data,
-            onVideoSelected: (video) => _onVideoSelected(context, video),
+            videoCatalog: catalog,
+            onVideoSelected: (video) => _onVideoSelected(
+              context,
+              catalog,
+              video,
+            ),
           );
         },
       ),

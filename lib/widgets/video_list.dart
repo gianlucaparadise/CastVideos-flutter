@@ -15,7 +15,7 @@ class VideoList extends StatelessWidget {
   final VideoCatalog videoCatalog;
   final VideoSelectedCallback onVideoSelected;
 
-  String get imagePrefix => this.videoCatalog?.categories?.first?.images;
+  String get _imagePrefix => this.videoCatalog?.categories?.first?.images;
 
   List<VideoDescriptor> get _videos =>
       this.videoCatalog?.categories?.first?.videos;
@@ -35,7 +35,7 @@ class VideoList extends StatelessWidget {
         onTap: () => this.onVideoSelected?.call(video),
         child: VideoListItem(
           video: video,
-          imagePrefix: imagePrefix,
+          imagePrefix: _imagePrefix,
         ),
       ),
     );
