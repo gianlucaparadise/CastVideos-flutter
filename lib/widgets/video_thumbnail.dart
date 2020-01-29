@@ -13,9 +13,13 @@ class VideoThumbnail extends StatelessWidget {
 
     return AspectRatio(
       aspectRatio: 480.0 / 270.0,
-      child: Image.network(
-        imageUrl,
-        fit: BoxFit.cover,
+      child: Hero(
+        // FIXME: this tag should be unique, but right now it isn't. An ID property is missing in the original json
+        tag: '${video.title}',
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

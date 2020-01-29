@@ -2,6 +2,7 @@ import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/routes/%20video_detail_route.dart';
 import 'package:cast_videos_flutter/services/connection_handler.dart';
+import 'package:cast_videos_flutter/services/routing/my_page_route.dart';
 import 'package:cast_videos_flutter/widgets/video_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -15,7 +16,7 @@ class VideoBrowserRoute extends StatelessWidget {
       BuildContext context, VideoCatalog catalog, VideoDescriptor video) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MyPageRoute(
         builder: (context) => VideoDetailRoute(
           videoCatalog: catalog,
           video: video,
