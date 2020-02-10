@@ -4,9 +4,8 @@ import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 
 class VideoListItem extends StatelessWidget {
-  VideoListItem({this.video, this.imagePrefix});
+  VideoListItem({this.video});
 
-  final String imagePrefix;
   final VideoDescriptor video;
 
   @override
@@ -17,7 +16,6 @@ class VideoListItem extends StatelessWidget {
           flex: 1,
           child: VideoThumbnail(
             video: video,
-            imagePrefix: imagePrefix,
           ),
         ),
         Container(width: 10), // this is a spacer

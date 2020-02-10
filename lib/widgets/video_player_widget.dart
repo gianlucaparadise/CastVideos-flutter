@@ -1,20 +1,18 @@
+import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   VideoPlayerWidget({
     Key key,
-    this.video,
-    this.videoPrefix,
-    this.imagePrefix,
+    @required this.video,
   }) : super(key: key);
 
   final VideoDescriptor video;
-  final String videoPrefix;
-  final String imagePrefix;
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
@@ -30,10 +28,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     // offers several different constructors to play videos from assets, files,
     // or the internet.
 
-    final videoSource = widget.video.sources
-        .firstWhere((s) => s.type.toLowerCase() == "hls", orElse: () => null);
+    final catalog = Provider.of<VideoCatalog>(this.context, listen: false);
 
-    final videoUrl = "${widget.videoPrefix}${videoSource.url}";
+    final videoSource = widget.video?.sources
+        ?.firstWhere((s) => s.type.toLowerCase() == "hls", orElse: () => null);
+    final videoPrefix = catalog?.categories?.first?.hls;
+    final videoUrl = videoPrefix + videoSource?.url;
     _controller = VideoPlayerController.network(
       videoUrl,
     );
@@ -90,7 +90,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             children: <Widget>[
               VideoThumbnail(
                 video: widget.video,
-                imagePrefix: widget.imagePrefix,
               ),
               CircularProgressIndicator(),
             ],

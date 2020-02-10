@@ -1,7 +1,7 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/routes/%20video_detail_route.dart';
-import 'package:cast_videos_flutter/services/connection_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:cast_videos_flutter/services/routing/my_page_route.dart';
 import 'package:cast_videos_flutter/widgets/video_list.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +12,11 @@ class VideoBrowserRoute extends StatelessWidget {
 
   final String title;
 
-  _onVideoSelected(
-      BuildContext context, VideoCatalog catalog, VideoDescriptor video) {
+  _onVideoSelected(BuildContext context, VideoDescriptor video) {
     Navigator.push(
       context,
       MyPageRoute(
         builder: (context) => VideoDetailRoute(
-          videoCatalog: catalog,
           video: video,
         ),
       ),
@@ -31,10 +29,9 @@ class VideoBrowserRoute extends StatelessWidget {
       appBar: AppBar(
         title: Text(this.title),
       ),
-      body: FutureBuilder<VideoCatalog>(
-        future: ConnectionHandler.getCatalog(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+      body: Consumer<VideoCatalog>(
+        builder: (context, catalog, widget) {
+          if (catalog == null) {
             // Return a centered Circular progress indicator
             return Center(
               child: Column(
@@ -46,24 +43,20 @@ class VideoBrowserRoute extends StatelessWidget {
             );
           }
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  Text("${snapshot.error}"),
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
-            );
-          }
-
-          final catalog = snapshot.data;
+          // if (snapshot.hasError) {
+          //   return Center(
+          //     child: Column(
+          //       children: <Widget>[
+          //         Text("${snapshot.error}"),
+          //       ],
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //     ),
+          //   );
+          // }
 
           return VideoList(
-            videoCatalog: catalog,
             onVideoSelected: (video) => _onVideoSelected(
               context,
-              catalog,
               video,
             ),
           );
