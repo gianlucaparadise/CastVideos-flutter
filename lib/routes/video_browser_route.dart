@@ -1,6 +1,6 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
-import 'package:cast_videos_flutter/routes/%20video_detail_route.dart';
+import 'package:cast_videos_flutter/routes/video_detail_route.dart';
 import 'package:provider/provider.dart';
 import 'package:cast_videos_flutter/services/routing/my_page_route.dart';
 import 'package:cast_videos_flutter/widgets/video_list.dart';
