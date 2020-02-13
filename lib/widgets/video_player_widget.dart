@@ -1,62 +1,45 @@
-import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   VideoPlayerWidget({
     Key key,
     @required this.video,
+    @required this.controller,
   }) : super(key: key);
 
   final VideoDescriptor video;
+
+  /// Video Controller. This is an input parameter to keep state over re-instantations of the widget
+  final VideoPlayerController controller;
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  VideoPlayerController _controller;
   Future<void> _initializeVideoPlayerFuture;
 
   @override
   void initState() {
-    // Create an store the VideoPlayerController. The VideoPlayerController
-    // offers several different constructors to play videos from assets, files,
-    // or the internet.
-
-    final catalog = Provider.of<VideoCatalog>(this.context, listen: false);
-
-    final videoSource = widget.video?.sources
-        ?.firstWhere((s) => s.type.toLowerCase() == "hls", orElse: () => null);
-    final videoPrefix = catalog?.categories?.first?.hls;
-    final videoUrl = videoPrefix + videoSource?.url;
-    _controller = VideoPlayerController.network(
-      videoUrl,
-    );
-
-    _initializeVideoPlayerFuture = _controller.initialize();
+    if (!widget.controller.value.initialized) {
+      _initializeVideoPlayerFuture = widget.controller.initialize();
+    } else {
+      _initializeVideoPlayerFuture = Future.value();
+    }
 
     super.initState();
   }
 
-  @override
-  void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
-    _controller.dispose();
-
-    super.dispose();
-  }
-
   void _onVideoTap() {
-    if (_controller.value.isPlaying) {
-      _controller.pause();
+    if (widget.controller.value.isPlaying) {
+      widget.controller.pause();
     } else {
       // If the video is paused, play it.
-      _controller.play();
+      widget.controller.play();
     }
   }
 
@@ -71,14 +54,14 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           // If the VideoPlayerController has finished initialization, use
           // the data it provides to limit the aspect ratio of the VideoPlayer.
           return AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
+            aspectRatio: widget.controller.value.aspectRatio,
             // Use the VideoPlayer widget to display the video.
             child: Hero(
               // FIXME: this tag should be unique, but right now it isn't. An ID property is missing in the original json. Should I generate one?
               tag: '${widget.video.title}',
               child: GestureDetector(
                 onTap: _onVideoTap,
-                child: VideoPlayer(_controller),
+                child: VideoPlayer(widget.controller),
               ),
             ),
           );
