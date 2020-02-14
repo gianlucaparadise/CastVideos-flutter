@@ -1,4 +1,5 @@
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
+import 'package:cast_videos_flutter/widgets/play_button.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -35,12 +36,53 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   void _onVideoTap() {
-    if (widget.controller.value.isPlaying) {
-      widget.controller.pause();
-    } else {
-      // If the video is paused, play it.
-      widget.controller.play();
-    }
+    setState(() {
+      if (widget.controller.value.isPlaying) {
+        widget.controller.pause();
+      } else {
+        // If the video is paused, play it.
+        widget.controller.play();
+      }
+    });
+  }
+
+  Widget _getPlayButton() {
+    return PlayButton(
+      isPlaying: widget.controller.value.isPlaying,
+      onTap: _onVideoTap,
+    );
+  }
+
+  Widget _getThumbnail() {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        VideoThumbnail(
+          video: widget.video,
+        ),
+        CircularProgressIndicator(),
+      ],
+    );
+  }
+
+  Widget _getVideoPlayer() {
+    return AspectRatio(
+      aspectRatio: widget.controller.value.aspectRatio,
+      // Use the VideoPlayer widget to display the video.
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          GestureDetector(
+            onTap: _onVideoTap,
+            child: Hero(
+              tag: '${widget.video.title}',
+              child: VideoPlayer(widget.controller),
+            ),
+          ),
+          _getPlayButton(),
+        ],
+      ),
+    );
   }
 
   @override
@@ -53,30 +95,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         if (snapshot.connectionState == ConnectionState.done) {
           // If the VideoPlayerController has finished initialization, use
           // the data it provides to limit the aspect ratio of the VideoPlayer.
-          return AspectRatio(
-            aspectRatio: widget.controller.value.aspectRatio,
-            // Use the VideoPlayer widget to display the video.
-            child: Hero(
-              // FIXME: this tag should be unique, but right now it isn't. An ID property is missing in the original json. Should I generate one?
-              tag: '${widget.video.title}',
-              child: GestureDetector(
-                onTap: _onVideoTap,
-                child: VideoPlayer(widget.controller),
-              ),
-            ),
-          );
+          return _getVideoPlayer();
         } else {
           // If the VideoPlayerController is still initializing, show a
           // loading spinner.
-          return Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              VideoThumbnail(
-                video: widget.video,
-              ),
-              CircularProgressIndicator(),
-            ],
-          );
+          return _getThumbnail();
         }
       },
     );
