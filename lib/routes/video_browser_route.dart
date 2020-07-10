@@ -13,10 +13,9 @@ class VideoBrowserRoute extends StatelessWidget {
   final String title;
 
   _onVideoSelected(BuildContext context, VideoDescriptor video) {
-    Navigator.push(
-      context,
-      MyPageRoute(
-        builder: (context) => VideoDetailRoute(
+    Navigator.of(context).push(
+      createRoute(
+        VideoDetailRoute(
           video: video,
         ),
       ),
