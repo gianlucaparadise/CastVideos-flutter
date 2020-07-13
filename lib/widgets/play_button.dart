@@ -22,7 +22,7 @@ class _PlayButtonState extends State<PlayButton> {
     if (!_visible) return;
 
     Future.delayed(
-      Duration(milliseconds: 1000),
+      Duration(milliseconds: 2000),
       () {
         setState(() {
           debugPrint("playbutton: Hiding button");
@@ -44,20 +44,24 @@ class _PlayButtonState extends State<PlayButton> {
   @override
   Widget build(BuildContext context) {
     debugPrint("playbutton: build");
-    _visible = true;
+
+    var button = IconButton(
+      iconSize: 80,
+      onPressed: widget.onTap,
+      icon: _getIcon(),
+    );
 
     if (widget.isPlaying) {
       _waitAndHide();
-    }
 
-    return AnimatedOpacity(
-      duration: Duration(milliseconds: 1000),
-      opacity: _visible ? 1.0 : 0.0,
-      child: IconButton(
-        iconSize: 80,
-        onPressed: widget.onTap,
-        icon: _getIcon(),
-      ),
-    );
+      return AnimatedOpacity(
+        duration: Duration(milliseconds: 500),
+        opacity: _visible ? 1.0 : 0.0,
+        child: button,
+      );
+    } else {
+      _visible = true;
+      return button;
+    }
   }
 }
