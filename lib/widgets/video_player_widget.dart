@@ -24,6 +24,11 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   Future<void> _initializeVideoPlayerFuture;
 
+  /// When true, the video should play.
+  /// If the video controller isn't initialized yet, the video should play
+  /// as soon as the video controller has initialized.
+  bool _hasRequestedStart = false;
+
   @override
   void initState() {
     if (!widget.controller.value.initialized) {
@@ -37,10 +42,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   void _onVideoTap() {
     setState(() {
+      _hasRequestedStart = true;
+
       if (widget.controller.value.isPlaying) {
+        // If the video is playing, pause it.
         widget.controller.pause();
       } else {
-        // If the video is paused, play it.
         widget.controller.play();
       }
     });
@@ -53,21 +60,28 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     );
   }
 
-  Widget _getThumbnail() {
+  Widget _getThumbnail(bool showProgress) {
+    var overlay;
+    if (showProgress) {
+      overlay = CircularProgressIndicator();
+    } else {
+      overlay = _getPlayButton();
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         VideoThumbnail(
           video: widget.video,
         ),
-        CircularProgressIndicator(),
+        overlay,
       ],
     );
   }
 
   Widget _getVideoPlayer() {
     return AspectRatio(
-      aspectRatio: widget.controller.value.aspectRatio,
+      aspectRatio: 480.0 / 270.0,
       // Use the VideoPlayer widget to display the video.
       child: Stack(
         alignment: Alignment.center,
@@ -92,15 +106,20 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return FutureBuilder(
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          // If the VideoPlayerController has finished initialization, use
-          // the data it provides to limit the aspect ratio of the VideoPlayer.
-          return _getVideoPlayer();
-        } else {
-          // If the VideoPlayerController is still initializing, show a
-          // loading spinner.
-          return _getThumbnail();
+        if (!_hasRequestedStart) {
+          // If the user hasn't started the video, I show the thumbnail
+          return _getThumbnail(false);
         }
+
+        if (snapshot.connectionState != ConnectionState.done) {
+          // If the user has started the video, but the video controller is not ready yet:
+          // show the thumbnail with a progress indicator overlay
+          return _getThumbnail(true);
+        }
+
+        // If the user has started the video and the videocontroller is ready:
+        // I show the video
+        return _getVideoPlayer();
       },
     );
   }
