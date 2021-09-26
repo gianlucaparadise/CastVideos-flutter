@@ -26,7 +26,7 @@ class CategoryDescriptor {
     images = json['images'];
     tracks = json['tracks'];
     if (json['videos'] != null) {
-      videos = new List<VideoDescriptor>();
+      videos = <VideoDescriptor>[];
       json['videos'].forEach((v) {
         videos.add(new VideoDescriptor.fromJson(v));
       });

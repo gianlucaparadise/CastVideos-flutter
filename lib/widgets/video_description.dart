@@ -16,17 +16,17 @@ class VideoDescription extends StatelessWidget {
       children: <Widget>[
         Text(
           video.title,
-          style: Theme.of(context).textTheme.headline,
+          style: Theme.of(context).textTheme.headline5,
         ),
         Container(height: 2), // spacer
         Text(
           video.studio,
-          style: Theme.of(context).textTheme.subhead,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         Container(height: 10), // spacer
         Text(
           video.subtitle,
-          style: Theme.of(context).textTheme.body1,
+          style: Theme.of(context).textTheme.bodyText2,
         ),
       ],
     );

@@ -26,7 +26,7 @@ class VideoDescriptor {
   VideoDescriptor.fromJson(Map<String, dynamic> json) {
     subtitle = json['subtitle'];
     if (json['sources'] != null) {
-      sources = new List<SourceDescriptor>();
+      sources = <SourceDescriptor>[];
       json['sources'].forEach((v) {
         sources.add(new SourceDescriptor.fromJson(v));
       });
@@ -38,7 +38,7 @@ class VideoDescriptor {
     studio = json['studio'];
     duration = json['duration'];
     if (json['tracks'] != null) {
-      tracks = new List<TrackDescriptor>();
+      tracks = <TrackDescriptor>[];
       json['tracks'].forEach((v) {
         tracks.add(new TrackDescriptor.fromJson(v));
       });

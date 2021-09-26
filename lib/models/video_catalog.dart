@@ -7,7 +7,7 @@ class VideoCatalog {
 
   VideoCatalog.fromJson(Map<String, dynamic> json) {
     if (json['categories'] != null) {
-      categories = new List<CategoryDescriptor>();
+      categories = <CategoryDescriptor>[];
       json['categories'].forEach((v) {
         categories.add(new CategoryDescriptor.fromJson(v));
       });

@@ -16,7 +16,7 @@ class VideoHeading extends StatelessWidget {
       children: <Widget>[
         Text(
           video.title,
-          style: Theme.of(context).textTheme.subhead.copyWith(
+          style: Theme.of(context).textTheme.subtitle1.copyWith(
                 fontSize: 18,
               ),
           overflow: TextOverflow.ellipsis,

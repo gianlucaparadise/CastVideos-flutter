@@ -31,7 +31,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void initState() {
-    if (!widget.controller.value.initialized) {
+    if (!widget.controller.value.isInitialized) {
       _initializeVideoPlayerFuture = widget.controller.initialize();
     } else {
       _initializeVideoPlayerFuture = Future.value();
