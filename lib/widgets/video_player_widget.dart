@@ -1,5 +1,6 @@
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/play_button.dart';
+import 'package:cast_videos_flutter/widgets/video_player_controls.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +23,15 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  _VideoPlayerWidgetState() {
+    listener = () {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    };
+  }
+
   Future<void> _initializeVideoPlayerFuture;
 
   /// When true, the video should play.
@@ -29,8 +39,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   /// as soon as the video controller has initialized.
   bool _hasRequestedStart = false;
 
+  VoidCallback listener;
+
   @override
   void initState() {
+    widget.controller.addListener(listener);
+
     if (!widget.controller.value.isInitialized) {
       _initializeVideoPlayerFuture = widget.controller.initialize();
     } else {
@@ -38,6 +52,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     }
 
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    widget.controller.removeListener(listener);
+    super.deactivate();
   }
 
   void _onVideoTap() {
@@ -57,6 +77,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return PlayButton(
       isPlaying: widget.controller.value.isPlaying,
       onTap: _onVideoTap,
+    );
+  }
+
+  Widget _getBottomControllers() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: VideoPlayerControls(
+        controller: widget.controller,
+        onPlayButtonTap: _onVideoTap,
+      ),
     );
   }
 
@@ -94,6 +124,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             ),
           ),
           _getPlayButton(),
+          _getBottomControllers(),
         ],
       ),
     );
