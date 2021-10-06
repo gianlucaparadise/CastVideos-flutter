@@ -49,7 +49,7 @@ class _VideoDetailRouteState extends State<VideoDetailRoute> {
       children: <Widget>[
         VideoPlayerWidget(
           video: widget.video,
-          controller: _controller,
+          videoPlayerController: _controller,
         ),
         Padding(
           padding: EdgeInsets.all(15),
@@ -65,7 +65,7 @@ class _VideoDetailRouteState extends State<VideoDetailRoute> {
     return Center(
       child: VideoPlayerWidget(
         video: widget.video,
-        controller: _controller,
+        videoPlayerController: _controller,
       ),
     );
   }

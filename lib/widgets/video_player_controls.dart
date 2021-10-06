@@ -1,15 +1,88 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPlayerControls extends StatelessWidget {
+class VideoPlayerControls extends StatefulWidget {
   VideoPlayerControls({
     Key key,
+    @required this.videoPlayerController,
     @required this.controller,
     @required this.onPlayButtonTap,
   }) : super(key: key);
 
-  final VideoPlayerController controller;
+  final VideoPlayerController videoPlayerController;
+  final VideoPlayerControlsController controller;
   final VoidCallback onPlayButtonTap;
+
+  @override
+  State<VideoPlayerControls> createState() => _VideoPlayerControlsState();
+}
+
+class VideoPlayerControlsController extends ChangeNotifier {
+  bool isVisible = true;
+
+  void showControls() {
+    this.isVisible = true;
+    notifyListeners();
+  }
+
+  void hideControls() {
+    this.isVisible = false;
+    notifyListeners();
+  }
+}
+
+class _VideoPlayerControlsState extends State<VideoPlayerControls> {
+  bool _visible = true;
+  Timer _timer;
+
+  @override
+  void initState() {
+    widget.controller.addListener(() {
+      _setVisibility(widget.controller.isVisible);
+    });
+
+    _setVisibility(true);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
+  }
+
+  void _setVisibility(bool isVisible) {
+    if (isVisible) {
+      setState(() {
+        _visible = true;
+        _waitAndHide();
+      });
+    } else if (!isVisible) {
+      setState(() {
+        _visible = false;
+      });
+    }
+  }
+
+  void _waitAndHide() {
+    // If it's already hidden, I don't do anything
+    if (!_visible) return;
+
+    _timer?.cancel();
+    _timer = Timer(
+      Duration(milliseconds: 5000),
+      () {
+        if (!mounted) return;
+        setState(() {
+          debugPrint("videocontrol: Hiding");
+          _visible = false;
+        });
+      },
+    );
+  }
 
   String _positionToString(Duration d, Duration total) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -23,7 +96,7 @@ class VideoPlayerControls extends StatelessWidget {
 
   Widget get _playPauseButton {
     IconData icon;
-    if (controller.value.isPlaying) {
+    if (widget.videoPlayerController.value.isPlaying) {
       icon = Icons.pause;
     } else {
       icon = Icons.play_arrow;
@@ -32,15 +105,15 @@ class VideoPlayerControls extends StatelessWidget {
     return IconButton(
       icon: Icon(icon),
       color: Colors.white,
-      onPressed: this.onPlayButtonTap,
+      onPressed: this.widget.onPlayButtonTap,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    var total = controller.value.duration;
+    var total = widget.videoPlayerController.value.duration;
 
-    return Container(
+    var controls = Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -59,12 +132,13 @@ class VideoPlayerControls extends StatelessWidget {
           children: [
             _playPauseButton,
             Text(
-              _positionToString(controller.value.position, total),
+              _positionToString(
+                  widget.videoPlayerController.value.position, total),
               style: TextStyle(color: Colors.white),
             ),
             Expanded(
               child: VideoProgressIndicator(
-                controller,
+                widget.videoPlayerController,
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 allowScrubbing: true,
                 colors: VideoProgressColors(
@@ -80,5 +154,15 @@ class VideoPlayerControls extends StatelessWidget {
         ),
       ),
     );
+
+    if (_visible) {
+      return controls;
+    } else {
+      return AnimatedOpacity(
+        duration: Duration(milliseconds: 1000),
+        opacity: _visible ? 1.0 : 0.0,
+        child: controls,
+      );
+    }
   }
 }

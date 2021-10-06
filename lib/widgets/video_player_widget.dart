@@ -1,5 +1,4 @@
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
-import 'package:cast_videos_flutter/widgets/play_button.dart';
 import 'package:cast_videos_flutter/widgets/video_player_controls.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
@@ -10,19 +9,21 @@ class VideoPlayerWidget extends StatefulWidget {
   VideoPlayerWidget({
     Key key,
     @required this.video,
-    @required this.controller,
+    @required this.videoPlayerController,
   }) : super(key: key);
 
   final VideoDescriptor video;
 
   /// Video Controller. This is an input parameter to keep state over re-instantations of the widget
-  final VideoPlayerController controller;
+  final VideoPlayerController videoPlayerController;
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
+  VideoPlayerControlsController _controlsController;
+
   _VideoPlayerWidgetState() {
     listener = () {
       if (!mounted) {
@@ -43,10 +44,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void initState() {
-    widget.controller.addListener(listener);
+    _controlsController = VideoPlayerControlsController();
 
-    if (!widget.controller.value.isInitialized) {
-      _initializeVideoPlayerFuture = widget.controller.initialize();
+    widget.videoPlayerController.addListener(listener);
+
+    if (!widget.videoPlayerController.value.isInitialized) {
+      _initializeVideoPlayerFuture = widget.videoPlayerController.initialize();
     } else {
       _initializeVideoPlayerFuture = Future.value();
     }
@@ -56,36 +59,34 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void deactivate() {
-    widget.controller.removeListener(listener);
+    widget.videoPlayerController.removeListener(listener);
     super.deactivate();
   }
 
-  void _onVideoTap() {
+  void _onPlayButtonTap() {
     setState(() {
       _hasRequestedStart = true;
 
-      if (widget.controller.value.isPlaying) {
+      if (widget.videoPlayerController.value.isPlaying) {
         // If the video is playing, pause it.
-        widget.controller.pause();
+        widget.videoPlayerController.pause();
       } else {
-        widget.controller.play();
+        widget.videoPlayerController.play();
       }
     });
   }
 
-  Widget _getPlayButton() {
-    return PlayButton(
-      isPlaying: widget.controller.value.isPlaying,
-      onTap: _onVideoTap,
-    );
+  void _onVideoTap() {
+    _controlsController.showControls();
   }
 
   Widget _getBottomControllers() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: VideoPlayerControls(
-        controller: widget.controller,
-        onPlayButtonTap: _onVideoTap,
+        videoPlayerController: widget.videoPlayerController,
+        onPlayButtonTap: _onPlayButtonTap,
+        controller: _controlsController,
       ),
     );
   }
@@ -95,7 +96,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     if (showProgress) {
       overlay = CircularProgressIndicator();
     } else {
-      overlay = _getPlayButton();
+      overlay = IconButton(
+        iconSize: 80,
+        color: Colors.white,
+        onPressed: _onPlayButtonTap,
+        icon: Icon(Icons.play_circle_filled),
+      );
     }
 
     return Stack(
@@ -120,10 +126,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             onTap: _onVideoTap,
             child: Hero(
               tag: '${widget.video.title}',
-              child: VideoPlayer(widget.controller),
+              child: VideoPlayer(widget.videoPlayerController),
             ),
           ),
-          _getPlayButton(),
           _getBottomControllers(),
         ],
       ),
