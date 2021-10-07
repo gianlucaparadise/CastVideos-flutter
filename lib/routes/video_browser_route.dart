@@ -8,11 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class VideoBrowserRoute extends StatelessWidget {
-  VideoBrowserRoute({Key key, this.title}) : super(key: key);
+  VideoBrowserRoute({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
-  _onVideoSelected(BuildContext context, VideoDescriptor video) {
+  _onVideoSelected(BuildContext context, VideoDescriptor? video) {
+    if (video == null) {
+      debugPrint("Selected video null");
+      return;
+    }
+
     Navigator.of(context).push(
       createRoute(
         VideoDetailRoute(
@@ -28,7 +33,7 @@ class VideoBrowserRoute extends StatelessWidget {
       appBar: AppBar(
         title: Text(this.title),
       ),
-      body: Consumer<VideoCatalog>(
+      body: Consumer<VideoCatalog?>(
         builder: (context, catalog, widget) {
           if (catalog == null) {
             // Return a centered Circular progress indicator

@@ -2,13 +2,14 @@ import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/video_description.dart';
 import 'package:cast_videos_flutter/widgets/video_player_widget.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoDetailRoute extends StatefulWidget {
   VideoDetailRoute({
-    @required this.video,
+    required this.video,
   });
 
   final VideoDescriptor video;
@@ -18,16 +19,16 @@ class VideoDetailRoute extends StatefulWidget {
 }
 
 class _VideoDetailRouteState extends State<VideoDetailRoute> {
-  VideoPlayerController _controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
-    final catalog = Provider.of<VideoCatalog>(this.context, listen: false);
+    final catalog = Provider.of<VideoCatalog?>(this.context, listen: false);
 
-    final videoSource = widget.video?.sources
-        ?.firstWhere((s) => s.type.toLowerCase() == "hls", orElse: () => null);
-    final videoPrefix = catalog?.categories?.first?.hls;
-    final videoUrl = videoPrefix + videoSource?.url;
+    final videoSource = widget.video.sources
+        ?.firstWhereOrNull((s) => s.type?.toLowerCase() == "hls");
+    final videoPrefix = catalog?.categories?.first.hls;
+    final videoUrl = "$videoPrefix" "${videoSource?.url}";
     _controller = VideoPlayerController.network(
       videoUrl,
     );
@@ -74,7 +75,7 @@ class _VideoDetailRouteState extends State<VideoDetailRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.video.title),
+        title: Text(widget.video.title ?? ""),
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {

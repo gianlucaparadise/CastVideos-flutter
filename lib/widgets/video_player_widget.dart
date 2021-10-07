@@ -7,9 +7,9 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   VideoPlayerWidget({
-    Key key,
-    @required this.video,
-    @required this.videoPlayerController,
+    Key? key,
+    required this.video,
+    required this.videoPlayerController,
   }) : super(key: key);
 
   final VideoDescriptor video;
@@ -22,7 +22,7 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  VideoPlayerControlsController _controlsController;
+  late VideoPlayerControlsController _controlsController;
 
   _VideoPlayerWidgetState() {
     listener = () {
@@ -33,14 +33,14 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     };
   }
 
-  Future<void> _initializeVideoPlayerFuture;
+  late Future<void> _initializeVideoPlayerFuture;
 
   /// When true, the video should play.
   /// If the video controller isn't initialized yet, the video should play
   /// as soon as the video controller has initialized.
   bool _hasRequestedStart = false;
 
-  VoidCallback listener;
+  late VoidCallback listener;
 
   @override
   void initState() {

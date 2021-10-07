@@ -7,7 +7,7 @@ class ConnectionHandler {
       'https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/f.json';
 
   static Future<VideoCatalog> getCatalog() async {
-    final response = await http.get(_CATALOG_URL);
+    final response = await http.get(Uri.parse(_CATALOG_URL));
 
     if (response.statusCode == 200) {
       return VideoCatalog.fromJson(json.decode(response.body));

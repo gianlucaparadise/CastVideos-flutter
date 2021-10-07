@@ -1,22 +1,13 @@
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 
 class CategoryDescriptor {
-  String name;
-  String hls;
-  String dash;
-  String mp4;
-  String images;
-  String tracks;
-  List<VideoDescriptor> videos;
-
-  CategoryDescriptor(
-      {this.name,
-      this.hls,
-      this.dash,
-      this.mp4,
-      this.images,
-      this.tracks,
-      this.videos});
+  String? name;
+  String? hls;
+  String? dash;
+  String? mp4;
+  String? images;
+  String? tracks;
+  List<VideoDescriptor>? videos;
 
   CategoryDescriptor.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -26,10 +17,11 @@ class CategoryDescriptor {
     images = json['images'];
     tracks = json['tracks'];
     if (json['videos'] != null) {
-      videos = <VideoDescriptor>[];
+      var jsonVideos = <VideoDescriptor>[];
       json['videos'].forEach((v) {
-        videos.add(new VideoDescriptor.fromJson(v));
+        jsonVideos.add(new VideoDescriptor.fromJson(v));
       });
+      this.videos = jsonVideos;
     }
   }
 
@@ -41,9 +33,7 @@ class CategoryDescriptor {
     data['mp4'] = this.mp4;
     data['images'] = this.images;
     data['tracks'] = this.tracks;
-    if (this.videos != null) {
-      data['videos'] = this.videos.map((v) => v.toJson()).toList();
-    }
+    data['videos'] = this.videos?.map((v) => v.toJson()).toList();
     return data;
   }
 }

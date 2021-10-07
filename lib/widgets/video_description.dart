@@ -2,7 +2,7 @@ import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:flutter/material.dart';
 
 class VideoDescription extends StatelessWidget {
-  VideoDescription({this.video});
+  VideoDescription({required this.video});
 
   final VideoDescriptor video;
 
@@ -15,17 +15,17 @@ class VideoDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          video.title,
+          video.title ?? "",
           style: Theme.of(context).textTheme.headline5,
         ),
         Container(height: 2), // spacer
         Text(
-          video.studio,
+          video.studio ?? "",
           style: Theme.of(context).textTheme.subtitle1,
         ),
         Container(height: 10), // spacer
         Text(
-          video.subtitle,
+          video.subtitle ?? "",
           style: Theme.of(context).textTheme.bodyText2,
         ),
       ],

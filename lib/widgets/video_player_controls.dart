@@ -5,10 +5,10 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerControls extends StatefulWidget {
   VideoPlayerControls({
-    Key key,
-    @required this.videoPlayerController,
-    @required this.controller,
-    @required this.onPlayButtonTap,
+    Key? key,
+    required this.videoPlayerController,
+    required this.controller,
+    required this.onPlayButtonTap,
   }) : super(key: key);
 
   final VideoPlayerController videoPlayerController;
@@ -35,7 +35,7 @@ class VideoPlayerControlsController extends ChangeNotifier {
 
 class _VideoPlayerControlsState extends State<VideoPlayerControls> {
   bool _visible = true;
-  Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {

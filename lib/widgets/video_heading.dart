@@ -2,7 +2,7 @@ import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:flutter/material.dart';
 
 class VideoHeading extends StatelessWidget {
-  VideoHeading({this.video});
+  VideoHeading({required this.video});
 
   final VideoDescriptor video;
 
@@ -15,8 +15,8 @@ class VideoHeading extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          video.title,
-          style: Theme.of(context).textTheme.subtitle1.copyWith(
+          video.title ?? "",
+          style: Theme.of(context).textTheme.subtitle1!.copyWith(
                 fontSize: 18,
               ),
           overflow: TextOverflow.ellipsis,
@@ -24,8 +24,8 @@ class VideoHeading extends StatelessWidget {
         ),
         Container(height: 2),
         Text(
-          video.studio,
-          style: Theme.of(context).textTheme.caption.copyWith(
+          video.studio ?? "",
+          style: Theme.of(context).textTheme.caption!.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),

@@ -1,18 +1,10 @@
 class TrackDescriptor {
-  String id;
-  String type;
-  String subtype;
-  String contentId;
-  String name;
-  String language;
-
-  TrackDescriptor(
-      {this.id,
-      this.type,
-      this.subtype,
-      this.contentId,
-      this.name,
-      this.language});
+  String? id;
+  String? type;
+  String? subtype;
+  String? contentId;
+  String? name;
+  String? language;
 
   TrackDescriptor.fromJson(Map<String, dynamic> json) {
     id = json['id'];

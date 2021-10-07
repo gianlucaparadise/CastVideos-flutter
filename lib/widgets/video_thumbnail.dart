@@ -5,15 +5,15 @@ import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VideoThumbnail extends StatelessWidget {
-  VideoThumbnail({this.video});
+  VideoThumbnail({required this.video});
 
   final VideoDescriptor video;
 
   @override
   Widget build(BuildContext context) {
-    final catalog = Provider.of<VideoCatalog>(context, listen: false);
-    final imagePrefix = catalog?.categories?.first?.images;
-    final imageUrl = imagePrefix + video?.image480x270;
+    final catalog = Provider.of<VideoCatalog?>(context, listen: false);
+    final imagePrefix = catalog?.categories?.first.images;
+    final imageUrl = "$imagePrefix" "${video.image480x270}";
 
     return AspectRatio(
       aspectRatio: 480.0 / 270.0,

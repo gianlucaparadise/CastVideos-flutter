@@ -4,7 +4,7 @@ import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 
 class VideoListItem extends StatelessWidget {
-  VideoListItem({this.video});
+  VideoListItem({required this.video});
 
   final VideoDescriptor video;
 

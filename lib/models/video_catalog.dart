@@ -1,24 +1,21 @@
 import 'package:cast_videos_flutter/models/category_descriptor.dart';
 
 class VideoCatalog {
-  List<CategoryDescriptor> categories;
-
-  VideoCatalog({this.categories});
+  List<CategoryDescriptor>? categories;
 
   VideoCatalog.fromJson(Map<String, dynamic> json) {
     if (json['categories'] != null) {
-      categories = <CategoryDescriptor>[];
+      var jsonCategories = <CategoryDescriptor>[];
       json['categories'].forEach((v) {
-        categories.add(new CategoryDescriptor.fromJson(v));
+        jsonCategories.add(new CategoryDescriptor.fromJson(v));
       });
+      this.categories = jsonCategories;
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.categories != null) {
-      data['categories'] = this.categories.map((v) => v.toJson()).toList();
-    }
+    data['categories'] = this.categories?.map((v) => v.toJson()).toList();
     return data;
   }
 }

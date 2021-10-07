@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(
-      FutureProvider<VideoCatalog>(
+      FutureProvider<VideoCatalog?>(
         create: (_) async => ConnectionHandler.getCatalog(),
         initialData: null,
         catchError: (context, error) {

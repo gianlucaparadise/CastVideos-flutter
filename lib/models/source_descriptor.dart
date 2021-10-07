@@ -1,9 +1,7 @@
 class SourceDescriptor {
-  String type;
-  String mime;
-  String url;
-
-  SourceDescriptor({this.type, this.mime, this.url});
+  String? type;
+  String? mime;
+  String? url;
 
   SourceDescriptor.fromJson(Map<String, dynamic> json) {
     type = json['type'];
