@@ -26,5 +26,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="com.example.cast_videos_flutter.CastOptionsProvider" />
     </application>
 </manifest>
