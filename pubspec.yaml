@@ -28,6 +28,14 @@ dependencies:
   video_player: ^2.2.5
   provider: ^6.0.1
 
+  # flutter_cast_framework:
+  #   path: ../flutter_cast_framework/ # this points to a local path for testing purpose
+
+  flutter_cast_framework:
+    git:
+      url: git://github.com/gianlucaparadise/flutter_cast_framework.git
+      ref: master
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
