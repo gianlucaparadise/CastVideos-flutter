@@ -1,6 +1,7 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/routes/video_detail_route.dart';
+import 'package:cast_videos_flutter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:cast_videos_flutter/services/routing/my_page_route.dart';
 import 'package:cast_videos_flutter/widgets/video_list.dart';
@@ -30,8 +31,8 @@ class VideoBrowserRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(this.title),
+      appBar: MyAppBar(
+        title: this.title,
       ),
       body: Consumer<VideoCatalog?>(
         builder: (context, catalog, widget) {
