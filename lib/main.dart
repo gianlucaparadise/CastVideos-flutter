@@ -4,6 +4,8 @@ import 'package:cast_videos_flutter/services/connection_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'cast/cast_manager.dart';
+
 void main() => runApp(
       FutureProvider<VideoCatalog?>(
         create: (_) async => ConnectionHandler.getCatalog(),
@@ -20,12 +22,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Cast Videos Sample',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => CastManager(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'Cast Videos Sample',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: VideoBrowserRoute(title: 'Cast Videos Sample'),
       ),
-      home: VideoBrowserRoute(title: 'Cast Videos Sample'),
     );
   }
 }
