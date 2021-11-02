@@ -1,3 +1,4 @@
+import 'package:cast_videos_flutter/cast/cast_manager.dart';
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/my_app_bar.dart';
@@ -46,13 +47,22 @@ class _VideoDetailRouteState extends State<VideoDetailRoute> {
     super.dispose();
   }
 
+  Widget _getVideoPlayer() {
+    return Consumer<CastManager>(builder: (context, castManager, child) {
+      var state = castManager.castConnectionState;
+      var isCastConnected = state == CastConnectionState.CONNECTED;
+      return VideoPlayerWidget(
+        video: widget.video,
+        videoPlayerController: _controller,
+        isCastConnected: isCastConnected,
+      );
+    });
+  }
+
   Widget _getPortrait() {
     return Column(
       children: <Widget>[
-        VideoPlayerWidget(
-          video: widget.video,
-          videoPlayerController: _controller,
-        ),
+        _getVideoPlayer(),
         Padding(
           padding: EdgeInsets.all(15),
           child: VideoDescription(
@@ -65,10 +75,7 @@ class _VideoDetailRouteState extends State<VideoDetailRoute> {
 
   Widget _getLandscape() {
     return Center(
-      child: VideoPlayerWidget(
-        video: widget.video,
-        videoPlayerController: _controller,
-      ),
+      child: _getVideoPlayer(),
     );
   }
 

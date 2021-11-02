@@ -1,5 +1,6 @@
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/video_player_controls.dart';
+import 'package:cast_videos_flutter/widgets/video_player_popup_menu_button.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,9 +11,11 @@ class VideoPlayerWidget extends StatefulWidget {
     Key? key,
     required this.video,
     required this.videoPlayerController,
+    required this.isCastConnected,
   }) : super(key: key);
 
   final VideoDescriptor video;
+  final bool isCastConnected;
 
   /// Video Controller. This is an input parameter to keep state over re-instantations of the widget
   final VideoPlayerController videoPlayerController;
@@ -48,6 +51,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
     widget.videoPlayerController.addListener(listener);
 
+    // FIXME: I should avoid videoPlayerController initialization when the app is casting
     if (!widget.videoPlayerController.value.isInitialized) {
       _initializeVideoPlayerFuture = widget.videoPlayerController.initialize();
     } else {
@@ -80,6 +84,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _controlsController.showControls();
   }
 
+  void _onPlayNowToCast() {
+    // TODO cast video
+  }
+
   Widget _getBottomControllers() {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -91,10 +99,14 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     );
   }
 
-  Widget _getThumbnail(bool showProgress) {
+  Widget _getThumbnail(bool showProgress, bool isCastConnected) {
     var overlay;
     if (showProgress) {
       overlay = CircularProgressIndicator();
+    } else if (isCastConnected) {
+      overlay = VideoPlayerPopupMenuButton(
+        onPlayNow: _onPlayNowToCast,
+      );
     } else {
       overlay = IconButton(
         iconSize: 80,
@@ -135,8 +147,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _getVideoPlayerBuilder() {
     // Use a FutureBuilder to display a loading spinner while waiting for the
     // VideoPlayerController to finish initializing.
     return FutureBuilder(
@@ -144,13 +155,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       builder: (context, snapshot) {
         if (!_hasRequestedStart) {
           // If the user hasn't started the video, I show the thumbnail
-          return _getThumbnail(false);
+          return _getThumbnail(false, false);
         }
 
         if (snapshot.connectionState != ConnectionState.done) {
           // If the user has started the video, but the video controller is not ready yet:
           // show the thumbnail with a progress indicator overlay
-          return _getThumbnail(true);
+          return _getThumbnail(true, false);
         }
 
         // If the user has started the video and the videocontroller is ready:
@@ -158,5 +169,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         return _getVideoPlayer();
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.isCastConnected) {
+      // If I'm connected, I don't need the full video player
+      return _getThumbnail(false, true);
+    }
+
+    // If I'm not connected, I want to build and initialize the full video player
+    return _getVideoPlayerBuilder();
   }
 }
