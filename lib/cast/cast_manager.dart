@@ -5,15 +5,17 @@ class CastManager extends ChangeNotifier {
   CastConnectionState _castConnectionState = CastConnectionState.NOT_CONNECTED;
   CastConnectionState get castConnectionState => _castConnectionState;
 
+  late FlutterCastFramework castFramework;
+
   CastManager() {
     debugPrint("CastManager: constructed");
-
-    FlutterCastFramework.castContext.sessionManager.state
+    castFramework = FlutterCastFramework.create([]);
+    castFramework.castContext.sessionManager.state
         .addListener(_onSessionStateChanged);
   }
 
   void _onSessionStateChanged() {
-    var sessionState = FlutterCastFramework.castContext.sessionManager.state.value;
+    var sessionState = castFramework.castContext.sessionManager.state.value;
     debugPrint("CastManager: sessionStateChanged: ${sessionState.toString()}");
 
     switch (sessionState) {
