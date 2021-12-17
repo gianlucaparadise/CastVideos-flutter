@@ -19,22 +19,22 @@ class CastManager extends ChangeNotifier {
     debugPrint("CastManager: sessionStateChanged: ${sessionState.toString()}");
 
     switch (sessionState) {
-      case SessionState.session_start_failed:
-      case SessionState.session_resume_failed:
-      case SessionState.session_ended:
+      case SessionState.start_failed:
+      case SessionState.resume_failed:
+      case SessionState.ended:
         _castConnectionState = CastConnectionState.NOT_CONNECTED;
         break;
 
-      case SessionState.session_started:
-      case SessionState.session_resumed:
+      case SessionState.started:
+      case SessionState.resumed:
         _castConnectionState = CastConnectionState.CONNECTED;
         break;
 
       case SessionState.idle:
-      case SessionState.session_starting:
-      case SessionState.session_ending:
-      case SessionState.session_resuming:
-      case SessionState.session_suspended:
+      case SessionState.starting:
+      case SessionState.ending:
+      case SessionState.resuming:
+      case SessionState.suspended:
         return;
     }
 
