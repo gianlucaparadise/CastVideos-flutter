@@ -1,3 +1,6 @@
+import 'package:cast_videos_flutter/cast/media_load_request_data_helper.dart';
+import 'package:cast_videos_flutter/models/category_descriptor.dart';
+import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cast_framework/cast.dart';
 
@@ -12,6 +15,23 @@ class CastManager extends ChangeNotifier {
     castFramework = FlutterCastFramework.create([]);
     castFramework.castContext.sessionManager.state
         .addListener(_onSessionStateChanged);
+  }
+
+  void loadMedia(
+    VideoDescriptor video,
+    CategoryDescriptor category,
+    int position,
+    bool autoPlay,
+  ) {
+    MediaLoadRequestData request = getMediaLoadRequestData(
+      video,
+      category,
+      position,
+      autoPlay,
+    );
+    var remoteMediaClient =
+        castFramework.castContext.sessionManager.remoteMediaClient;
+    remoteMediaClient.load(request);
   }
 
   void _onSessionStateChanged() {

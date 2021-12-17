@@ -1,9 +1,12 @@
+import 'package:cast_videos_flutter/cast/cast_manager.dart';
+import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/widgets/video_player_controls.dart';
 import 'package:cast_videos_flutter/widgets/video_player_popup_menu_button.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
@@ -85,7 +88,17 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   void _onPlayNowToCast() {
-    // TODO cast video
+    final catalog = Provider.of<VideoCatalog?>(context, listen: false);
+    final categories = catalog?.categories;
+    if (categories == null || categories.isEmpty) {
+      debugPrint("missing catalog categories, cannot load media");
+      return;
+    }
+
+    final category = categories.first;
+    final castManager = Provider.of<CastManager>(context, listen: false);
+    castManager.loadMedia(this.widget.video, category, 0, true);
+
   }
 
   Widget _getBottomControllers() {
