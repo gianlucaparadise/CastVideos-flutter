@@ -92,7 +92,7 @@ MediaMetadata getMediaMetadata(
   // };
 
   final imagesPrefix = getPrefix(category, TAG_IMAGES);
-  final img = WebImage()..url = "$imagesPrefix${video.thumb}";
+  final img = WebImage()..url = "$imagesPrefix${video.image480x270}";
   final bigImg = WebImage()..url = "$imagesPrefix${video.image780x1200}";
   movieMetadata.webImages = [
     img,
