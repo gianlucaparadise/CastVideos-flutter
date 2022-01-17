@@ -1,4 +1,5 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
+import 'package:cast_videos_flutter/routes/mini_controller_route.dart';
 import 'package:cast_videos_flutter/routes/video_browser_route.dart';
 import 'package:cast_videos_flutter/services/connection_handler.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,19 @@ class MyApp extends StatelessWidget {
           create: (context) => CastManager(),
         )
       ],
-      child: MaterialApp(
-        title: 'Cast Videos Sample',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: VideoBrowserRoute(title: 'Cast Videos Sample'),
+      child: Column(
+        children: [
+          Expanded(
+            child: MaterialApp(
+              title: 'Cast Videos Sample',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: VideoBrowserRoute(title: 'Cast Videos Sample'),
+            ),
+          ),
+          MiniControllerRoute()
+        ],
       ),
     );
   }

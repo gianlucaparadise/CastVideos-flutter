@@ -1,6 +1,7 @@
 import 'package:cast_videos_flutter/cast/media_load_request_data_helper.dart';
 import 'package:cast_videos_flutter/models/category_descriptor.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cast_framework/cast.dart';
 
@@ -8,13 +9,29 @@ class CastManager extends ChangeNotifier {
   CastConnectionState _castConnectionState = CastConnectionState.NOT_CONNECTED;
   CastConnectionState get castConnectionState => _castConnectionState;
 
+  PlayerState _playerState = PlayerState.idle;
+  PlayerState get playerState => _playerState;
+
+  bool _isInExpandedControls = false;
+  bool get isInExpandedControls => _isInExpandedControls;
+  set isInExpandedControls(bool value) {
+    if (_isInExpandedControls == value) return;
+    debugPrint("CastManager: isInExpandedControls: $value");
+
+    _isInExpandedControls = value;
+    notifyListeners();
+  }
+
   late FlutterCastFramework castFramework;
 
   CastManager() {
     debugPrint("CastManager: constructed");
     castFramework = FlutterCastFramework.create([]);
-    castFramework.castContext.sessionManager.state
-        .addListener(_onSessionStateChanged);
+    final sessionManager = castFramework.castContext.sessionManager;
+
+    sessionManager.state.addListener(_onSessionStateChanged);
+    sessionManager.remoteMediaClient.playerState
+        .addListener(_onPlayerStateChanged);
   }
 
   void loadMedia(
@@ -43,6 +60,7 @@ class CastManager extends ChangeNotifier {
       case SessionState.resume_failed:
       case SessionState.ended:
         _castConnectionState = CastConnectionState.NOT_CONNECTED;
+        _playerState = PlayerState.idle;
         break;
 
       case SessionState.started:
@@ -58,6 +76,15 @@ class CastManager extends ChangeNotifier {
         return;
     }
 
+    notifyListeners();
+  }
+
+  void _onPlayerStateChanged() {
+    final sessionManager = castFramework.castContext.sessionManager;
+    final playerState = sessionManager.remoteMediaClient.playerState.value;
+    debugPrint("CastManager: playerStateChanged: ${playerState.toString()}");
+
+    this._playerState = playerState;
     notifyListeners();
   }
 }

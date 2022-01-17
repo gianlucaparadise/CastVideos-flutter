@@ -101,11 +101,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     final castManager = Provider.of<CastManager>(context, listen: false);
     castManager.loadMedia(this.widget.video, category, 0, true);
 
-    Navigator.of(context).push(
-      createRoute(
-        ExpandedControlsRoute(),
-      ),
-    );
+    openExpandedControls(context);
   }
 
   Widget _getBottomControllers() {
