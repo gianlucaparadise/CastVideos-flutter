@@ -3,13 +3,17 @@ import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/routes/video_detail_route.dart';
 import 'package:cast_videos_flutter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:cast_videos_flutter/services/routing/my_page_route.dart';
 import 'package:cast_videos_flutter/widgets/video_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class VideoBrowserRoute extends StatelessWidget {
-  VideoBrowserRoute({Key? key, required this.title}) : super(key: key);
+  static const routeName = "/VideoList";
+
+  const VideoBrowserRoute({
+    Key? key,
+    this.title = 'Cast Videos Sample',
+  }) : super(key: key);
 
   final String title;
 
@@ -19,12 +23,9 @@ class VideoBrowserRoute extends StatelessWidget {
       return;
     }
 
-    Navigator.of(context).push(
-      createRoute(
-        VideoDetailRoute(
-          video: video,
-        ),
-      ),
+    Navigator.of(context).pushNamed(
+      VideoDetailRoute.routeName,
+      arguments: VideoDetailRouteArguments(video),
     );
   }
 

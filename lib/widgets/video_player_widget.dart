@@ -2,7 +2,6 @@ import 'package:cast_videos_flutter/cast/cast_manager.dart';
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/models/video_descriptor.dart';
 import 'package:cast_videos_flutter/routes/expanded_controls_route.dart';
-import 'package:cast_videos_flutter/services/routing/my_page_route.dart';
 import 'package:cast_videos_flutter/widgets/video_player_controls.dart';
 import 'package:cast_videos_flutter/widgets/video_player_popup_menu_button.dart';
 import 'package:cast_videos_flutter/widgets/video_thumbnail.dart';

@@ -1,11 +1,11 @@
 import 'package:cast_videos_flutter/models/video_catalog.dart';
 import 'package:cast_videos_flutter/routes/mini_controller_route.dart';
-import 'package:cast_videos_flutter/routes/video_browser_route.dart';
 import 'package:cast_videos_flutter/services/connection_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'cast/cast_manager.dart';
+import 'routing.dart';
 
 void main() => runApp(
       FutureProvider<VideoCatalog?>(
@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              home: VideoBrowserRoute(title: 'Cast Videos Sample'),
+              onGenerateRoute: onGenerateRoute,
+              initialRoute: initialRoute,
             ),
           ),
           MiniControllerRoute()

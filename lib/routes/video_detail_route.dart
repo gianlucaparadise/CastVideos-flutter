@@ -9,12 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoDetailRoute extends StatefulWidget {
-  VideoDetailRoute({
-    required this.video,
-  });
-
+class VideoDetailRouteArguments {
   final VideoDescriptor video;
+
+  const VideoDetailRouteArguments(this.video);
+}
+
+class VideoDetailRoute extends StatefulWidget {
+  static const routeName = "/VideoDetail";
+
+  VideoDetailRoute(VideoDetailRouteArguments args) {
+    this.video = args.video;
+  }
+
+  late VideoDescriptor video;
 
   @override
   _VideoDetailRouteState createState() => _VideoDetailRouteState();
