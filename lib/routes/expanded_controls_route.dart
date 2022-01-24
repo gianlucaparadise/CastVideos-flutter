@@ -7,7 +7,8 @@ void openExpandedControls(BuildContext context) {
   CastManager castManager = Provider.of<CastManager>(context, listen: false);
   castManager.isInExpandedControls = true;
 
-  Navigator.of(context).pushNamed(ExpandedControlsRoute.routeName);
+  Navigator.of(context, rootNavigator: true)
+      .pushNamed(ExpandedControlsRoute.routeName);
 }
 
 class ExpandedControlsRoute extends StatelessWidget {
