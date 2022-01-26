@@ -12,16 +12,6 @@ class CastManager extends ChangeNotifier {
   PlayerState _playerState = PlayerState.idle;
   PlayerState get playerState => _playerState;
 
-  bool _isInExpandedControls = false;
-  bool get isInExpandedControls => _isInExpandedControls;
-  set isInExpandedControls(bool value) {
-    if (_isInExpandedControls == value) return;
-    debugPrint("CastManager: isInExpandedControls: $value");
-
-    _isInExpandedControls = value;
-    notifyListeners();
-  }
-
   late FlutterCastFramework castFramework;
 
   CastManager() {

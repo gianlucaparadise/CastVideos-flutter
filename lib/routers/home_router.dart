@@ -1,3 +1,4 @@
+import 'package:cast_videos_flutter/routes/mini_controller_route.dart';
 import 'package:cast_videos_flutter/routes/video_browser_route.dart';
 import 'package:cast_videos_flutter/routes/video_detail_route.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,16 @@ class _HomeRouterState extends State<HomeRouter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Navigator(
-        key: _navigatorKey,
-        onGenerateRoute: _onGenerateRoute,
+      body: Column(
+        children: [
+          Expanded(
+            child: Navigator(
+              key: _navigatorKey,
+              onGenerateRoute: _onGenerateRoute,
+            ),
+          ),
+          MiniControllerRoute()
+        ],
       ),
     );
   }

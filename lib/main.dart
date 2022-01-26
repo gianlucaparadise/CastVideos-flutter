@@ -29,14 +29,7 @@ class MyApp extends StatelessWidget {
           create: (context) => CastManager(),
         )
       ],
-      child: Column(
-        children: [
-          Expanded(
-            child: RootRouter(),
-          ),
-          MiniControllerRoute()
-        ],
-      ),
+      child: RootRouter(),
     );
   }
 }

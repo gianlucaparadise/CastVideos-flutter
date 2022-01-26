@@ -4,9 +4,6 @@ import 'package:flutter_cast_framework/widgets.dart';
 import 'package:provider/provider.dart';
 
 void openExpandedControls(BuildContext context) {
-  CastManager castManager = Provider.of<CastManager>(context, listen: false);
-  castManager.isInExpandedControls = true;
-
   Navigator.of(context, rootNavigator: true)
       .pushNamed(ExpandedControlsRoute.routeName);
 }
@@ -23,10 +20,7 @@ class ExpandedControlsRoute extends StatelessWidget {
     return Scaffold(
       body: ExpandedControls(
         castFramework: castManager.castFramework,
-        onCloseRequested: () {
-          Navigator.pop(context);
-          castManager.isInExpandedControls = false;
-        },
+        onCloseRequested: () => Navigator.pop(context),
       ),
     );
   }
