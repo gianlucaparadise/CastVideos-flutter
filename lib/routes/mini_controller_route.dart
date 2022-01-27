@@ -33,6 +33,7 @@ class MiniControllerRoute extends StatelessWidget {
     if (!isPlayerVisible) return SizedBox.shrink();
 
     return SafeArea(
+      top: false,
       child: MiniController(
         castFramework: castManager.castFramework,
         onControllerTapped: () => _onMiniControllerTapped(context),
