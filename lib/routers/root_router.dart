@@ -1,5 +1,6 @@
 import 'package:cast_videos_flutter/routers/home_router.dart';
 import 'package:cast_videos_flutter/routes/expanded_controls_route.dart';
+import 'package:cast_videos_flutter/routes/queue_list_route.dart';
 import 'package:flutter/material.dart';
 
 class RootRouter extends StatefulWidget {
@@ -21,6 +22,9 @@ class _RootRouterState extends State<RootRouter> {
 
           case ExpandedControlsRoute.routeName:
             return const ExpandedControlsRoute();
+
+          case QueueListRoute.routeName:
+            return const QueueListRoute();
 
           default:
             throw new UnimplementedError(
