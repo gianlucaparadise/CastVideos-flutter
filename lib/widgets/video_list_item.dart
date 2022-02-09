@@ -27,6 +27,18 @@ class VideoListItem extends StatelessWidget {
     openExpandedControls(context);
   }
 
+  void _onAddToQueue(BuildContext context, CastManager castManager) {
+    final catalog = Provider.of<VideoCatalog?>(context, listen: false);
+    final categories = catalog?.categories;
+    if (categories == null || categories.isEmpty) {
+      debugPrint("missing catalog categories, cannot load media");
+      return;
+    }
+
+    final category = categories.first;
+    castManager.queueAppendItem(this.video, category);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CastManager>(
@@ -35,6 +47,7 @@ class VideoListItem extends StatelessWidget {
             castManager.castConnectionState == CastConnectionState.CONNECTED;
         final moreMenuButton = MorePlayerPopupMenuButton(
           onPlayNow: () => _onPlayNowToCast(context, castManager),
+          onAddToQueue: () => _onAddToQueue(context, castManager),
         );
 
         return Row(

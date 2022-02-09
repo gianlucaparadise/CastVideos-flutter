@@ -149,3 +149,17 @@ MediaTrack? getMediaTrack(TrackDescriptor track, String? trackPrefix) {
     ..contentId = "$trackPrefix${track.contentId}"
     ..language = track.language;
 }
+
+MediaQueueItem getMediaQueueItem(
+  VideoDescriptor video,
+  CategoryDescriptor category,
+  double preloadTime,
+  bool autoPlay,
+) {
+  final mediaInfo = getMediaInfo(video, category);
+
+  return MediaQueueItem()
+    ..media = mediaInfo
+    ..autoplay = autoPlay
+    ..preloadTime = preloadTime;
+}

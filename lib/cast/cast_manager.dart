@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cast_framework/cast.dart';
 
+/// in seconds
+const double QUEUE_PRELOAD_TIME = 20;
+
 class CastManager extends ChangeNotifier {
   CastConnectionState _castConnectionState = CastConnectionState.NOT_CONNECTED;
   CastConnectionState get castConnectionState => _castConnectionState;
@@ -39,6 +42,15 @@ class CastManager extends ChangeNotifier {
     var remoteMediaClient =
         castFramework.castContext.sessionManager.remoteMediaClient;
     remoteMediaClient.load(request);
+  }
+
+  void queueAppendItem(VideoDescriptor video, CategoryDescriptor category) {
+    MediaQueueItem item =
+        getMediaQueueItem(video, category, QUEUE_PRELOAD_TIME, false);
+
+    var remoteMediaClient =
+        castFramework.castContext.sessionManager.remoteMediaClient;
+    remoteMediaClient.queueAppendItem(item);
   }
 
   void _onSessionStateChanged() {

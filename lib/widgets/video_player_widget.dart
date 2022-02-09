@@ -103,6 +103,19 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     openExpandedControls(context);
   }
 
+  void _onAddToQueue() {
+    final catalog = Provider.of<VideoCatalog?>(context, listen: false);
+    final categories = catalog?.categories;
+    if (categories == null || categories.isEmpty) {
+      debugPrint("missing catalog categories, cannot load media");
+      return;
+    }
+
+    final category = categories.first;
+    final castManager = Provider.of<CastManager>(context, listen: false);
+    castManager.queueAppendItem(this.widget.video, category);
+  }
+
   Widget _getBottomControllers() {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -121,6 +134,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     } else if (isCastConnected) {
       overlay = VideoPlayerPopupMenuButton(
         onPlayNow: _onPlayNowToCast,
+        onAddToQueue: _onAddToQueue,
       );
     } else {
       overlay = IconButton(
